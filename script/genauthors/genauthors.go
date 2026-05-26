@@ -1,17 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"io/ioutil"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
 	"os/exec"
 	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 	"text/template"
 )
@@ -165,107 +161,15 @@ func main() {
 }
 
 func parseContribution(regex *regexp.Regexp, line string) *Contribution {
-	line = strings.TrimSpace(line)
-	if len(line) <= 0 {
-		return nil
-	}
-
-	m := regex.FindStringSubmatch(line)
-	if m == nil || len(m) < 4 {
-		return nil
-	}
-
-	email := m[3]
-	for _, pat := range bots {
-		if strings.Contains(email, pat) {
-			return nil
-		}
-	}
-
-	var commits int
-	if m[1] != "" {
-		var err error
-		commits, err = strconv.Atoi(m[1])
-		if err != nil {
-			return nil
-		}
-	} else if i, ok := initial[email]; ok {
-		commits = i
-	}
-
-	return &Contribution{
-		Commits: commits,
-		Name:    m[2],
-		Email:   email,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func getGitHubLoginNames(emails []string) map[string]string {
-	result := make(map[string]string)
-	for i := 0; i < len(emails); i += 5 {
-		end := i + 5
-		if end > len(emails) {
-			end = len(emails)
-		}
-		if r, _ := getGitHubLoginNames1(emails[i:end]); r != nil {
-			for k, v := range r {
-				if _, ok := result[k]; !ok {
-					result[k] = v
-				}
-			}
-		}
-	}
-	return result
-}
+func getGitHubLoginNames(emails []string) map[string]string { _ = "STUB: not implemented"; return nil }
 
 func getGitHubLoginNames1(emails []string) (map[string]string, error) {
-	r := make(map[string]string)
-	if len(emails) <= 0 {
-		return r, nil
-	}
-
-	queries := make([]string, 0, len(emails))
-	for _, email := range emails {
-		queries = append(queries, url.PathEscape(email)+"%20in:email")
-	}
-
-	req, err := http.NewRequest(
-		"GET",
-		"https://api.github.com/search/users?q="+strings.Join(queries, "%20OR%20"),
-		nil,
-	)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("Accept", "application/vnd.github.v3.text-match+json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var rslt GitHubUserSearchResponse
-	err = json.Unmarshal(body, &rslt)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, u := range rslt.Items {
-		for _, m := range u.Matches {
-			if _, ok := r[m.Fragment]; !ok {
-				r[m.Fragment] = u.Login
-			}
-		}
-	}
-
-	return r, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GitHubUserSearchResponse describes a GitHub user search result.

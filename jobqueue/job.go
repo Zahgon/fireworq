@@ -1,8 +1,6 @@
 package jobqueue
 
 import (
-	"time"
-
 	"github.com/fireworq/fireworq/jobqueue/logger"
 )
 
@@ -39,31 +37,16 @@ type completedJob struct {
 	failed uint
 }
 
-func (j *completedJob) FailCount() uint {
-	return j.Job.FailCount() + j.failed
-}
+func (j *completedJob) FailCount() uint { _ = "STUB: not implemented"; return 0 }
 
-func (j *completedJob) Status() string {
-	var s string
-	if j.failed == 0 {
-		s = "completed"
-	} else {
-		s = "failed"
-	}
-	return s
-}
+func (j *completedJob) Status() string { _ = "STUB: not implemented"; return "" }
 
 func (j *completedJob) ToLoggable() logger.LoggableJob {
-	return &loggableCompletedJob{
-		j.Job.ToLoggable(),
-		j.Status(),
-		j.FailCount(),
-	}
+	_ = "STUB: not implemented"
+	return *new(logger.LoggableJob)
 }
 
-func (j *completedJob) canRetry() bool {
-	return j.Job.RetryCount() > 0
-}
+func (j *completedJob) canRetry() bool { _ = "STUB: not implemented"; return false }
 
 type loggableCompletedJob struct {
 	logger.LoggableJob
@@ -71,31 +54,25 @@ type loggableCompletedJob struct {
 	failCount uint
 }
 
-func (j *loggableCompletedJob) Status() string {
-	return j.status
-}
+func (j *loggableCompletedJob) Status() string { _ = "STUB: not implemented"; return "" }
 
 func (j *loggableCompletedJob) FailCount() uint {
-	return j.failCount
+	_ = "STUB: not implemented"
+
+	// nextJob : implements the following interfaces
+	// - NextInfo
+	return 0
 }
 
-// nextJob : implements the following interfaces
-// - NextInfo
 type nextJob struct {
 	job Job
 }
 
-func (j *nextJob) NextDelay() uint64 {
-	return uint64(time.Duration(j.job.RetryDelay()) * time.Second / time.Millisecond)
-}
+func (j *nextJob) NextDelay() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (j *nextJob) RetryCount() uint {
-	return j.job.RetryCount() - 1
-}
+func (j *nextJob) RetryCount() uint { _ = "STUB: not implemented"; return 0 }
 
-func (j *nextJob) FailCount() uint {
-	return j.job.FailCount()
-}
+func (j *nextJob) FailCount() uint { _ = "STUB: not implemented"; return 0 }
 
 // NextInfo describes information of a retry.
 type NextInfo interface {

@@ -1,10 +1,7 @@
 package jobqueue
 
 import (
-	"github.com/fireworq/fireworq/jobqueue/logger"
 	"github.com/fireworq/fireworq/model"
-
-	"github.com/rs/zerolog/log"
 )
 
 // Impl is an interface of a job queue implementation.
@@ -37,14 +34,8 @@ type JobQueue interface {
 
 // Start returns a job queue.
 func Start(definition *model.Queue, q Impl) JobQueue {
-	jq := &jobQueue{
-		name:       definition.Name,
-		maxWorkers: definition.MaxWorkers,
-		impl:       q,
-		stats:      newStats(),
-	}
-	q.Start()
-	return jq
+	_ = "STUB: not implemented"
+	return *new(JobQueue)
 }
 
 type jobQueue struct {
@@ -54,119 +45,40 @@ type jobQueue struct {
 	stats      *stats
 }
 
-func (q *jobQueue) Name() string {
-	return q.name
-}
+func (q *jobQueue) Name() string { _ = "STUB: not implemented"; return "" }
 
-func (q *jobQueue) Stop() <-chan struct{} {
-	return q.impl.Stop()
-}
+func (q *jobQueue) Stop() <-chan struct{} { _ = "STUB: not implemented"; return nil }
 
-func (q *jobQueue) Push(j IncomingJob) (uint64, error) {
-	job, err := q.impl.Push(j)
-	if err != nil {
-		return 0, err
-	}
+func (q *jobQueue) Push(j IncomingJob) (uint64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-	q.stats.push(1)
+func (q *jobQueue) Pop(limit uint) ([]Job, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	loggableJob := job.ToLoggable()
-	logger.Info(q.name, "push", loggableJob, "New job accepted")
+func (q *jobQueue) Complete(job Job, res *Result) { _ = "STUB: not implemented"; return }
 
-	return loggableJob.ID(), nil
-}
+func (q *jobQueue) IsActive() bool { _ = "STUB: not implemented"; return false }
 
-func (q *jobQueue) Pop(limit uint) ([]Job, error) {
-	results, err := q.impl.Pop(limit)
-	if err != nil {
-		return nil, err
-	}
+func (q *jobQueue) Node() (*Node, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	q.stats.pop(int64(len(results)))
-
-	for _, j := range results {
-		logger.Debug(q.name, "pop", j.ToLoggable(), "A job grabbed")
-	}
-	return results, nil
-}
-
-func (q *jobQueue) Complete(job Job, res *Result) {
-	var j *completedJob
-	if res.IsSuccess() {
-		j = &completedJob{job, 0}
-	} else {
-		j = &completedJob{job, 1}
-	}
-
-	loggable := j.ToLoggable()
-
-	if res.IsSuccess() {
-		logger.Info(q.name, "complete", loggable, res.Message)
-		q.stats.succeed(1)
-		q.stats.complete(1)
-		q.stats.elapsed(logger.Elapsed(loggable))
-		q.impl.Delete(job)
-	} else if res.IsPermanentFailure() || !j.canRetry() {
-		logger.Info(q.name, "complete", loggable, res.Message)
-		q.stats.fail(1)
-		q.stats.permanentlyFail(1)
-		q.stats.complete(1)
-		q.stats.elapsed(logger.Elapsed(loggable))
-		if failureLog, ok := q.FailureLog(); ok {
-			err := failureLog.Add(job, res)
-			if err != nil {
-				log.Warn().Msg(err.Error())
-			}
-		}
-		q.impl.Delete(job)
-	} else {
-		logger.Info(q.name, "retry", loggable, res.Message)
-		q.stats.fail(1)
-		q.impl.Update(job, &nextJob{j})
-	}
-}
-
-func (q *jobQueue) IsActive() bool {
-	return q.impl.IsActive()
-}
-
-func (q *jobQueue) Node() (*Node, error) {
-	if info, ok := q.impl.(HasNodeInfo); ok {
-		return info.Node()
-	}
-	return nil, nil
-}
-
-func (q *jobQueue) Stats() *Stats {
-	return q.stats.export()
-}
+func (q *jobQueue) Stats() *Stats { _ = "STUB: not implemented"; return nil }
 
 func (q *jobQueue) Inspector() (Inspector, bool) {
-	if hasInspector, ok := q.impl.(HasInspector); ok {
-		return hasInspector.Inspector(), ok
-	}
-	return nil, false
+	_ = "STUB: not implemented"
+	return *new(Inspector), false
 }
 
 func (q *jobQueue) FailureLog() (FailureLog, bool) {
-	if hasFailureLog, ok := q.impl.(HasFailureLog); ok {
-		return hasFailureLog.FailureLog(), ok
-	}
-	return nil, false
+	_ = "STUB: not implemented"
+	return *new(FailureLog), false
 }
 
 // InactiveError is an error returned when Pop() is called on an
 // inactive queue.
 type InactiveError struct{}
 
-func (e *InactiveError) Error() string {
-	return "queue is not active"
-}
+func (e *InactiveError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // ConnectionClosedError is an error returned when Pop() is called but
 // connection to a remote store has been lost.
 type ConnectionClosedError struct{}
 
-func (e *ConnectionClosedError) Error() string {
-	return "connection has been closed"
-}
+func (e *ConnectionClosedError) Error() string { _ = "STUB: not implemented"; return "" }

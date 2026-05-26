@@ -3,24 +3,13 @@
 package mysql
 
 import (
-	"bytes"
-	"fmt"
-	"io/ioutil"
 	"regexp"
-	"strings"
 	"text/template"
 
 	"github.com/fireworq/fireworq/model"
 )
 
-func newTableName(definition *model.Queue) *tableName {
-	re := invalidTablenameChars
-	name := string(re.ReplaceAll([]byte(definition.Name), []byte{'_'}))
-	return &tableName{
-		JobQueue: strings.Join([]string{"fireworq_jq(", name, ")"}, ""),
-		Failure:  strings.Join([]string{"fireworq_jq_fail(", name, ")"}, ""),
-	}
-}
+func newTableName(definition *model.Queue) *tableName { _ = "STUB: not implemented"; return nil }
 
 type tableName struct {
 	JobQueue string
@@ -28,34 +17,14 @@ type tableName struct {
 	Failure  string
 }
 
-func (tn *tableName) makeQueries() *sqls {
-	return &sqls{
-		createJobqueue:     tn.makeQuery(tmplCreateJobqueue),
-		createFailure:      tn.makeQuery(tmplCreateFailure),
-		grab:               tn.makeQuery(tmplGrabJobs),
-		grabbed:            tn.makeQuery(tmplGrabbedJobs),
-		launch:             tn.makeQuery(tmplLaunchJobs),
-		insertJob:          tn.makeQuery(tmplInsertJob),
-		insertFailedJob:    tn.makeQuery(tmplInsertFailedJob),
-		deleteFailedJob:    tn.makeQuery(tmplDeleteFailedJob),
-		deleteJob:          tn.makeQuery(tmplDeleteJob),
-		updateJob:          tn.makeQuery(tmplUpdateJob),
-		orphan:             tn.makeQuery(tmplOrphanJobs),
-		recover:            tn.makeQuery(tmplRecoverJobs),
-		inspectJob:         tn.makeQuery(tmplInspectJob),
-		inspectJobs:        tn.makeQuery(tmplInspectJobs),
-		inspectJobsAsc:     tn.makeQuery(tmplInspectJobsAsc),
-		failedJob:          tn.makeQuery(tmplFailedJob),
-		failedJobs:         tn.makeQuery(tmplFailedJobs),
-		recentlyFailedJobs: tn.makeQuery(tmplRecentlyFailedJobs),
-	}
-}
+func (tn *tableName) makeQueries() *sqls { _ = "STUB: not implemented"; return nil }
 
 func (tn *tableName) makeQuery(tmpl *template.Template) string {
-	buffer := new(bytes.Buffer)
-	_ = tmpl.Execute(buffer, tn) // ignore error
-	return buffer.String()
+	_ = "STUB: not implemented"
+	return ""
 }
+
+// ignore error
 
 type sqls struct {
 	createJobqueue     string
@@ -100,23 +69,7 @@ var (
 	tmplRecentlyFailedJobs *template.Template
 )
 
-func mustLoadTemplate(name string) *template.Template {
-	f, err := Assets.Open(fmt.Sprintf("/data/jobqueue/mysql/%s.sql", name))
-	if err != nil {
-		panic("Cannot load template (" + name + "): " + err.Error())
-	}
-
-	buf, err := ioutil.ReadAll(f)
-	if err != nil {
-		panic("Cannot load template (" + name + "): " + err.Error())
-	}
-
-	tmpl, err := template.New(name).Parse(string(buf))
-	if err != nil {
-		panic("Cannot load template (" + name + "): " + err.Error())
-	}
-	return tmpl
-}
+func mustLoadTemplate(name string) *template.Template { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	invalidTablenameChars = regexp.MustCompile("[^0-9a-z_]")

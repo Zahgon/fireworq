@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/fireworq/fireworq/dispatcher"
 	"github.com/fireworq/fireworq/jobqueue"
-	"github.com/fireworq/fireworq/jobqueue/factory"
 	"github.com/fireworq/fireworq/model"
 )
 
@@ -22,47 +21,19 @@ type runningQueue struct {
 	dispatcher dispatcher.Dispatcher
 }
 
-func startJobQueue(q *model.Queue) *runningQueue {
-	jq := factory.Start(q)
-	d := dispatcher.Start(jq, q)
-	return &runningQueue{jq, d}
-}
+func startJobQueue(q *model.Queue) *runningQueue { _ = "STUB: not implemented"; return nil }
 
-func (q *runningQueue) Deactivate() <-chan struct{} {
-	deactivated := make(chan struct{})
-	go func() {
-		<-q.dispatcher.Stop()
-		deactivated <- struct{}{}
-	}()
-	return deactivated
-}
+func (q *runningQueue) Deactivate() <-chan struct{} { _ = "STUB: not implemented"; return nil }
 
-func (q *runningQueue) Stop() <-chan struct{} {
-	stopped := make(chan struct{})
-	go func() {
-		<-q.JobQueue.Stop()
-		stopped <- struct{}{}
-	}()
-	return stopped
-}
+func (q *runningQueue) Stop() <-chan struct{} { _ = "STUB: not implemented"; return nil }
 
 func (q *runningQueue) Push(job jobqueue.IncomingJob) (uint64, error) {
-	id, err := q.JobQueue.Push(job)
-	q.dispatcher.Ping()
-	return id, err
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (q *runningQueue) PollingInterval() uint {
-	return q.dispatcher.PollingInterval()
-}
+func (q *runningQueue) PollingInterval() uint { _ = "STUB: not implemented"; return 0 }
 
-func (q *runningQueue) MaxWorkers() uint {
-	return q.dispatcher.MaxWorkers()
-}
+func (q *runningQueue) MaxWorkers() uint { _ = "STUB: not implemented"; return 0 }
 
-func (q *runningQueue) WorkerStats() *dispatcher.Stats {
-	if q.IsActive() {
-		return q.dispatcher.Stats()
-	}
-	return &dispatcher.Stats{}
-}
+func (q *runningQueue) WorkerStats() *dispatcher.Stats { _ = "STUB: not implemented"; return nil }

@@ -1,8 +1,6 @@
 package config
 
 import (
-	"os"
-	"strings"
 	"sync"
 )
 
@@ -20,73 +18,21 @@ var cached = config{
 // If it has no specific value, it falls back to a value of
 // environment variable starting with "FIREWORQ_" and then a default
 // value which is returned from GetDefault.
-func Get(key string) string {
-	cached.RLock()
-	v, ok := cached.c[key]
-	cached.RUnlock()
-	if ok {
-		return v
-	}
-
-	envKey := "FIREWORQ_" + strings.ToUpper(key)
-	v = os.Getenv(envKey)
-	if v == "" {
-		v = GetDefault(key)
-	}
-	cached.Lock()
-	cached.c[key] = v
-	cached.Unlock()
-	return v
-}
+func Get(key string) string { _ = "STUB: not implemented"; return "" }
 
 // GetDefault returns the default configuration value of a key.
-func GetDefault(key string) string {
-	cached.RLock()
-	defer cached.RUnlock()
-	item, ok := defaultConf[key]
-	if ok {
-		return item.defaultValue
-	}
-	return ""
-}
+func GetDefault(key string) string { _ = "STUB: not implemented"; return "" }
 
 // Set sets the current configuration value of a key.
-func Set(k, v string) {
-	cached.Lock()
-	cached.c[k] = v
-	cached.Unlock()
-}
+func Set(k, v string) { _ = "STUB: not implemented"; return }
 
 // SetDefault sets the default configuration value of a key.
-func SetDefault(k, v string) {
-	cached.Lock()
-	defer cached.Unlock()
-	item, ok := defaultConf[k]
-	if ok {
-		item.defaultValue = v
-	} else {
-		defaultConf[k] = &configItem{defaultValue: v}
-	}
-}
+func SetDefault(k, v string) { _ = "STUB: not implemented"; return }
 
 // Locally overrides the current configuration value of a key in a block.
 //
 // This is not goroutine safe and should only be used in tests.
-func Locally(k, v string, block func()) {
-	original := Get(k)
-	Set(k, v)
-	defer func() { Set(k, original) }()
-	block()
-}
+func Locally(k, v string, block func()) { _ = "STUB: not implemented"; return }
 
 // Keys returns a list of configuration keys.
-func Keys() []string {
-	cached.RLock()
-	defer cached.RUnlock()
-
-	keys := make([]string, 0, len(cached.c))
-	for k := range defaultConf {
-		keys = append(keys, k)
-	}
-	return keys
-}
+func Keys() []string { _ = "STUB: not implemented"; return nil }

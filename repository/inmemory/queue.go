@@ -1,11 +1,7 @@
 package inmemory
 
 import (
-	"encoding/json"
-	"errors"
-	"sort"
 	"sync"
-	"sync/atomic"
 
 	"github.com/fireworq/fireworq/model"
 	"github.com/fireworq/fireworq/repository"
@@ -24,64 +20,27 @@ type queueRepository struct{}
 // NewQueueRepository creates a new repository.QueueRepository which
 // uses in-memory data store.
 func NewQueueRepository() repository.QueueRepository {
-	return &queueRepository{}
+	_ = "STUB: not implemented"
+	return *new(repository.QueueRepository)
 }
 
 func (r *queueRepository) Add(q *model.Queue) (bool, error) {
-	qs.Lock()
-	defer qs.Unlock()
-
-	j1, _ := json.Marshal(qs.m[q.Name])
-	j2, _ := json.Marshal(q)
-	if string(j1) != string(j2) {
-		qs.m[q.Name] = *q
-		r.updateRevision()
-		return true, nil
-	}
-
+	_ = "STUB: not implemented"
 	return false, nil
 }
 
 func (r *queueRepository) FindAll() ([]model.Queue, error) {
-	qs.RLock()
-	defer qs.RUnlock()
-
-	queues := make([]model.Queue, 0, len(qs.m))
-	for _, q := range qs.m {
-		queues = append(queues, q)
-	}
-
-	sort.Slice(queues, func(i, j int) bool {
-		return queues[i].Name < queues[j].Name
-	})
-
-	return queues, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (r *queueRepository) FindByName(name string) (*model.Queue, error) {
-	qs.RLock()
-	defer qs.RUnlock()
-
-	queue, ok := qs.m[name]
-	if !ok {
-		return nil, errors.New("Queue not found")
-	}
-	return &queue, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (r *queueRepository) DeleteByName(name string) error {
-	qs.Lock()
-	defer qs.Unlock()
+func (r *queueRepository) DeleteByName(name string) error { _ = "STUB: not implemented"; return nil }
 
-	delete(qs.m, name)
-	r.updateRevision()
-	return nil
-}
+func (r *queueRepository) updateRevision() { _ = "STUB: not implemented"; return }
 
-func (r *queueRepository) updateRevision() {
-	atomic.AddUint64(&qs.revision, 1)
-}
-
-func (r *queueRepository) Revision() (uint64, error) {
-	return atomic.LoadUint64(&qs.revision), nil
-}
+func (r *queueRepository) Revision() (uint64, error) { _ = "STUB: not implemented"; return 0, nil }

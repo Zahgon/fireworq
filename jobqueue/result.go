@@ -24,36 +24,16 @@ type Result struct {
 }
 
 // IsSuccess returns if the job succeeded
-func (rslt *Result) IsSuccess() bool {
-	return rslt.Status == ResultStatusSuccess
-}
+func (rslt *Result) IsSuccess() bool { _ = "STUB: not implemented"; return false }
 
 // IsFailure returns if the job is successfully processed or not.
-func (rslt *Result) IsFailure() bool {
-	return rslt.Status != ResultStatusSuccess
-}
+func (rslt *Result) IsFailure() bool { _ = "STUB: not implemented"; return false }
 
 // IsPermanentFailure returns if the job is permanently failed.
-func (rslt *Result) IsPermanentFailure() bool {
-	return rslt.Status == ResultStatusPermanentFailure
-}
+func (rslt *Result) IsPermanentFailure() bool { _ = "STUB: not implemented"; return false }
 
 // IsFinished returns if the job can be retried or not.
-func (rslt *Result) IsFinished() bool {
-	switch rslt.Status {
-	case ResultStatusSuccess, ResultStatusPermanentFailure:
-		return true
-	default:
-		return false
-	}
-}
+func (rslt *Result) IsFinished() bool { _ = "STUB: not implemented"; return false }
 
 // IsValid returns if the result status is valid or not.
-func (rslt *Result) IsValid() bool {
-	switch rslt.Status {
-	case ResultStatusSuccess, ResultStatusFailure, ResultStatusPermanentFailure:
-		return true
-	default:
-		return false
-	}
-}
+func (rslt *Result) IsValid() bool { _ = "STUB: not implemented"; return false }

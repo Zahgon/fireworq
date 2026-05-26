@@ -2,7 +2,6 @@ package inmemory
 
 import (
 	"sync"
-	"sync/atomic"
 
 	"github.com/fireworq/fireworq/model"
 	"github.com/fireworq/fireworq/repository"
@@ -21,60 +20,32 @@ type routingRepository struct{}
 // NewRoutingRepository creates a new repository.RoutingRepository
 // which uses in-memory data store.
 func NewRoutingRepository() repository.RoutingRepository {
-	return &routingRepository{}
+	_ = "STUB: not implemented"
+	return *new(repository.RoutingRepository)
 }
 
 func (r *routingRepository) Add(jobCategory string, queueName string) (bool, error) {
-	rs.Lock()
-	defer rs.Unlock()
-
-	if rs.m[jobCategory] != queueName {
-		rs.m[jobCategory] = queueName
-		r.updateRevision()
-		return true, nil
-	}
+	_ = "STUB: not implemented"
 	return false, nil
 }
 
 func (r *routingRepository) FindAll() ([]model.Routing, error) {
-	rs.RLock()
-	defer rs.RUnlock()
-
-	routings := make([]model.Routing, 0, len(rs.m))
-	for category, queue := range rs.m {
-		routings = append(routings, model.Routing{
-			QueueName:   queue,
-			JobCategory: category,
-		})
-	}
-
-	return routings, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (r *routingRepository) FindQueueNameByJobCategory(category string) string {
-	rs.RLock()
-	defer rs.RUnlock()
-
-	return rs.m[category]
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func (r *routingRepository) DeleteByJobCategory(category string) error {
-	rs.RLock()
-	defer rs.RUnlock()
-
-	delete(rs.m, category)
-	r.updateRevision()
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (r *routingRepository) updateRevision() {
-	atomic.AddUint64(&rs.revision, 1)
-}
+func (r *routingRepository) updateRevision() { _ = "STUB: not implemented"; return }
 
-func (r *routingRepository) Revision() (uint64, error) {
-	return atomic.LoadUint64(&rs.revision), nil
-}
+func (r *routingRepository) Revision() (uint64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (r *routingRepository) Reload() error {
-	return nil
-}
+func (r *routingRepository) Reload() error { _ = "STUB: not implemented"; return nil }

@@ -1,9 +1,6 @@
 package mysql
 
 import (
-	"database/sql"
-	"strings"
-
 	"github.com/fireworq/fireworq/jobqueue"
 	"github.com/fireworq/fireworq/model"
 )
@@ -19,68 +16,30 @@ type primaryBackupJobQueue struct {
 // Inactive nodes become backup nodes, which will be active when the
 // active node dies.
 func NewPrimaryBackup(definition *model.Queue, dsn string) jobqueue.Impl {
-	q := newJobQueue(definition, dsn)
-	return &primaryBackupJobQueue{q, nil}
+	_ = "STUB: not implemented"
+	return *new(jobqueue.Impl)
 }
 
-func (q *primaryBackupJobQueue) Start() {
-	q.jobQueue.Start()
-	q.activator = startActivator(
-		q,
-		q.Recover,
-	)
-}
+func (q *primaryBackupJobQueue) Start() { _ = "STUB: not implemented"; return }
 
-func (q *primaryBackupJobQueue) Stop() <-chan struct{} {
-	stopped := make(chan struct{})
-	go func() {
-		<-q.activator.stop()
-		<-q.jobQueue.Stop()
-		stopped <- struct{}{}
-	}()
-	return stopped
-}
+func (q *primaryBackupJobQueue) Stop() <-chan struct{} { _ = "STUB: not implemented"; return nil }
 
-func (q *primaryBackupJobQueue) IsActive() bool {
-	return q.activator.isActive()
-}
+func (q *primaryBackupJobQueue) IsActive() bool { _ = "STUB: not implemented"; return false }
 
 func (q *primaryBackupJobQueue) Pop(limit uint) ([]jobqueue.Job, error) {
-	if !q.IsActive() {
-		return nil, &jobqueue.InactiveError{}
-	}
-
-	return q.jobQueue.Pop(limit)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (q *primaryBackupJobQueue) Node() (*jobqueue.Node, error) {
-	query := `
-		SELECT ID, HOST FROM information_schema.processlist
-		WHERE ID = IS_USED_LOCK(?)
-	`
-
-	var node jobqueue.Node
-	err := q.db.QueryRow(query, q.activator.lockName()).Scan(&node.ID, &node.Host)
-	if err == sql.ErrNoRows {
-		return nil, nil
-	} else if err != nil {
-		return nil, err
-	}
-
-	// Strip the port number
-	if i := strings.LastIndex(node.Host, ":"); i >= 0 {
-		node.Host = node.Host[0:i]
-	}
-
-	return &node, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Strip the port number
 
 // activation interface
 
-func (q *primaryBackupJobQueue) queueName() string {
-	return q.name
-}
+func (q *primaryBackupJobQueue) queueName() string { _ = "STUB: not implemented"; return "" }
 
-func (q *primaryBackupJobQueue) getDsn() string {
-	return q.dsn
-}
+func (q *primaryBackupJobQueue) getDsn() string { _ = "STUB: not implemented"; return "" }

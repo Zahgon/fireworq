@@ -1,12 +1,5 @@
 package kicker
 
-import (
-	"sync/atomic"
-	"time"
-
-	"github.com/rs/zerolog/log"
-)
-
 // PollingKicker is a builder of a Kicker which kicks a Kickable
 // repeatedly on some interval.
 type PollingKicker struct {
@@ -14,14 +7,7 @@ type PollingKicker struct {
 }
 
 // NewKicker creates a new polling kicker instance.
-func (cfg *PollingKicker) NewKicker() Kicker {
-	log.Debug().Msgf("Polling interval: %d", cfg.Interval)
-	return &pollingKicker{
-		interval: cfg.Interval,
-		stop:     make(chan struct{}, 1),
-		stopped:  make(chan struct{}, 1),
-	}
-}
+func (cfg *PollingKicker) NewKicker() Kicker { _ = "STUB: not implemented"; return *new(Kicker) }
 
 type pollingKicker struct {
 	interval uint
@@ -30,35 +16,16 @@ type pollingKicker struct {
 	stopped  chan struct{}
 }
 
-func (k *pollingKicker) Start(kickable Kickable) {
-	go k.loop(kickable)
-}
+func (k *pollingKicker) Start(kickable Kickable) { _ = "STUB: not implemented"; return }
 
-func (k *pollingKicker) Stop() <-chan struct{} {
-	k.stop <- struct{}{}
-	return k.stopped
-}
+func (k *pollingKicker) Stop() <-chan struct{} { _ = "STUB: not implemented"; return nil }
 
 func (k *pollingKicker) Ping() {
+	_ = "STUB: not implemented"
 	// ignore; do nothing
+	return
 }
 
-func (k *pollingKicker) PollingInterval() uint {
-	return k.interval
-}
+func (k *pollingKicker) PollingInterval() uint { _ = "STUB: not implemented"; return 0 }
 
-func (k *pollingKicker) loop(kickable Kickable) {
-	ticker := time.NewTicker(time.Duration(k.interval) * time.Millisecond)
-Loop:
-	for {
-		select {
-		case <-ticker.C:
-			kickable.Kick()
-		case <-k.stop:
-			ticker.Stop()
-			atomic.StoreUint32(&k.started, 0)
-			break Loop
-		}
-	}
-	k.stopped <- struct{}{}
-}
+func (k *pollingKicker) loop(kickable Kickable) { _ = "STUB: not implemented"; return }

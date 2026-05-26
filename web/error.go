@@ -1,7 +1,6 @@
 package web
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -13,24 +12,15 @@ type clientError interface {
 
 type simpleClientError int
 
-func (e simpleClientError) httpStatus() int {
-	return int(e)
-}
+func (e simpleClientError) httpStatus() int { _ = "STUB: not implemented"; return 0 }
 
-func (e simpleClientError) Error() string {
-	status := e.httpStatus()
-	return fmt.Sprintf("%d %s", status, http.StatusText(status))
-}
+func (e simpleClientError) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e simpleClientError) clientError() string {
-	return e.Error()
-}
+func (e simpleClientError) clientError() string { _ = "STUB: not implemented"; return "" }
 
 func (e simpleClientError) WithDetail(detail string) *detailedClientError {
-	return &detailedClientError{
-		status:  int(e),
-		message: detail,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type detailedClientError struct {
@@ -38,18 +28,11 @@ type detailedClientError struct {
 	message string
 }
 
-func (e *detailedClientError) httpStatus() int {
-	return e.status
-}
+func (e *detailedClientError) httpStatus() int { _ = "STUB: not implemented"; return 0 }
 
-func (e *detailedClientError) Error() string {
-	status := e.httpStatus()
-	return fmt.Sprintf("%d %s\n\n%s", status, http.StatusText(status), e.message)
-}
+func (e *detailedClientError) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e *detailedClientError) clientError() string {
-	return e.Error()
-}
+func (e *detailedClientError) clientError() string { _ = "STUB: not implemented"; return "" }
 
 type serverError interface {
 	error
@@ -59,24 +42,15 @@ type serverError interface {
 
 type simpleServerError int
 
-func (e simpleServerError) httpStatus() int {
-	return int(e)
-}
+func (e simpleServerError) httpStatus() int { _ = "STUB: not implemented"; return 0 }
 
-func (e simpleServerError) Error() string {
-	status := e.httpStatus()
-	return fmt.Sprintf("%d %s", status, http.StatusText(status))
-}
+func (e simpleServerError) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e simpleServerError) serverError() string {
-	return e.Error()
-}
+func (e simpleServerError) serverError() string { _ = "STUB: not implemented"; return "" }
 
 func (e simpleServerError) WithDetail(detail string) *detailedServerError {
-	return &detailedServerError{
-		status:  int(e),
-		message: detail,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type detailedServerError struct {
@@ -84,18 +58,11 @@ type detailedServerError struct {
 	message string
 }
 
-func (e *detailedServerError) httpStatus() int {
-	return e.status
-}
+func (e *detailedServerError) httpStatus() int { _ = "STUB: not implemented"; return 0 }
 
-func (e *detailedServerError) Error() string {
-	status := e.httpStatus()
-	return fmt.Sprintf("%d %s\n\n%s", status, http.StatusText(status), e.message)
-}
+func (e *detailedServerError) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e *detailedServerError) serverError() string {
-	return e.Error()
-}
+func (e *detailedServerError) serverError() string { _ = "STUB: not implemented"; return "" }
 
 const (
 	errMethodNotAllowed    = simpleClientError(http.StatusMethodNotAllowed)
